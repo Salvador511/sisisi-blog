@@ -1,9 +1,10 @@
-const apiFetch = async ({ payload, method = 'GET', url }) => {
+const apiFetch = async ({ payload, method = 'GET', url, token = '' }) => {
   try {
     const options = {
       method,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
       },
     }
     if (payload) {
