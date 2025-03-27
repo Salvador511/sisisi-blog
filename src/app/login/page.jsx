@@ -5,6 +5,7 @@ import { TextField, Button, Typography as T } from '@mui/material'
 import { blueGrey, grey } from '@mui/material/colors'
 import { useRouter } from 'next/navigation'
 import { EMPTY_OBJECT } from '~/app/Libs/Utils/constants'
+import AuthWrapper from '~/app/Libs/SharedUI/AuthWrapper/authWrapper'
 import Loading from '~/app/Libs/SharedUI/Loading/Loading'
 import CustomAlert from '~/app/Libs/SharedUI/CustomAlert/CustomAlert'
 import getClassPrefixer from '~/app/Libs/getClassPrefixer'
@@ -105,7 +106,11 @@ const Home = () => {
 }
 
 const Wrapper = () => {
-  return <Home />
+  return (
+    <AuthWrapper hasToBeLogged={false}>
+      <Home />
+    </AuthWrapper>
+  )
 }
 
 export default Wrapper

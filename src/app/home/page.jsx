@@ -1,3 +1,5 @@
+import AuthWrapper from '~/app/Libs/SharedUI/AuthWrapper/authWrapper'
+
 const Home = () => {
   return (
     <div>
@@ -6,4 +8,11 @@ const Home = () => {
   )
 }
 
-export default Home
+const Wrapper = () => {
+  return (
+    <AuthWrapper hasToBeLogged={true}>
+      <Home />
+    </AuthWrapper>
+  )
+}
+export default Wrapper
