@@ -1,13 +1,14 @@
 import jwt from 'jsonwebtoken'
 import ERROR from '~/Libs/error'
 
-export const authenticateToken = ({ headers }) => {
+const authenticateToken = ({ headers, neededAdmind = false }) => {
   const authHeader = headers.get('authorization')
   const token = authHeader && authHeader.replace(/Bearer /,'')
   if (token) {
-    const { professorId } = jwt.verify(token, process.env.JWT_SECRET)
-    return professorId
+    const { userId, isAdmin } = jwt.verify(token, process.env.JWT_SECRET)
+    return neededAdmind ? isAdmin : userId
   }
   return ERROR.FORBIDDEN()
 }
 
+export default authenticateToken
