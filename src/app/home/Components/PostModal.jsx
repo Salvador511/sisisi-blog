@@ -1,4 +1,4 @@
-import {Typography as T } from '@mui/material'
+import { Typography as T } from '@mui/material'
 const PostModal = ({ post }) => {
   return (
     <div>

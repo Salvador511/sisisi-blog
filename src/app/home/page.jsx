@@ -60,8 +60,8 @@ const Home = ({ posts }) => {
             <T variant="h6">{post.title}</T>
             <T variant="body1">{
               post.content.length > 100
-              ? `${post.content.slice(0, 100)}...`
-              : post.content
+                ? `${post.content.slice(0, 100)}...`
+                : post.content
             }</T>
           </div>
         </Button>
