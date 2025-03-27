@@ -1,4 +1,4 @@
-import AuthWrapper from '~/app/Libs/SharedUI/AuthWrapper/authWrapper'
+import AuthWrapper from '~/app/Libs/SharedUI/AuthWrapper/AuthWrapper'
 
 const Home = () => {
   return (
