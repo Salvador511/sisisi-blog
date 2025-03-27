@@ -5,3 +5,11 @@ export const User = {
     'password'
   ]
 }
+
+export const Post = {
+  name: 'post',
+  shape: [
+    'title',
+    'content'
+  ]
+}
