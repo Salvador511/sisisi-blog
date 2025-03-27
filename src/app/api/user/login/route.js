@@ -26,7 +26,7 @@ export const POST = async request => {
       userId: user.id,
       isAdmin: user.isAdmin
     }, process.env.JWT_SECRET)
-    return NextResponse.json(token, { status: 200 })
+    return NextResponse.json({ token, user }, { status: 200 })
  
   } catch (error) {
     console.error('Error on login', error)
