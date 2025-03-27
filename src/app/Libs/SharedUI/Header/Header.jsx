@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles'
 import { Typography as T, Button } from '@mui/material'
 import getClassPrefixer from '~/app/Libs/getClassPrefixer'
 
-const displayName = 'Login'
+const displayName = 'Header'
 const classes = getClassPrefixer(displayName)
 
 const Container = styled('div')({
@@ -43,7 +43,6 @@ const Header = ({ isLogged, onLogout }) => {
               <Button variant="text" className={classes.button} href="/register">Sign Up</Button>
             </>
             : <>
-              <Button variant="text" className={classes.button} href="/home">Home</Button>
               <Button variant="text" className={classes.button} onClick={onLogout}>Log Out</Button>
             </>
         }

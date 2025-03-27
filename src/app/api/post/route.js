@@ -4,7 +4,6 @@ import queryDB from '~/app/api/Libs/queryDB'
 import validatorFields from '~/app/api/Libs/validatorFields'
 import authenticateToken from '~/app/api/Libs/auth'
 import cleanerData from '~/app/api/Libs/cleanerData'
-import payloadFormatter from '~/app/api/Libs/Utils/payloadFormatter'
 import { Post } from '~/app/api/entities'
 import { EMPTY_OBJECT } from '~/app/Libs/Utils/constants'
 
@@ -39,7 +38,7 @@ export const GET = async request => {
       ...(filter.length > 0 ? { filter } : EMPTY_OBJECT)
     })
     if(payloads){
-      const response = payloadFormatter(payloads.map(payload => cleanerData({ payload })))
+      const response = payloads.map(payload => cleanerData({ payload }))
       return NextResponse.json(response, { status: 200 })
     }
     return ERROR.NOT_FOUND()
