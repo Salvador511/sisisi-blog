@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { styled } from '@mui/material/styles'
 import { TextField, Button, Typography as T } from '@mui/material'
-import { blueGrey, grey } from '@mui/material/colors'
+import { green, grey } from '@mui/material/colors'
 import { useRouter } from 'next/navigation'
 import { EMPTY_OBJECT } from '~/app/Libs/Utils/constants'
 import AuthWrapper from '~/app/Libs/SharedUI/AuthWrapper/AuthWrapper'
@@ -16,9 +16,9 @@ const displayName = 'Login'
 const classes = getClassPrefixer(displayName)
 
 const Container = styled('div')({
-  backgroundColor: blueGrey[500],
+  backgroundColor: green[800],
   width: '100vw',
-  height: '100vh',
+  flex: '1',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'center',
@@ -29,13 +29,16 @@ const Container = styled('div')({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: grey[300],
+    backgroundColor: grey[50],
     padding: '2rem',
     gap: '1rem',
-    borderRadius: '1ch'
+    borderRadius: '1ch',
   },
   [`& .${classes.registerButton}`]: {
     padding: '0',
+  },
+  [`& .${classes.input}`]: {
+    borderColor: grey[50],
   }
 })
 
@@ -56,14 +59,15 @@ const Home = () => {
   const handleSubmit = async e => {
     e.preventDefault()
     setLoading(true)
-    const token = await apiFetch({ payload: values, method: 'POST', url: '/api/user/login' })
-    if (token.error) {
-      setError(token.error)
+    const response = await apiFetch({ payload: values, method: 'POST', url: '/api/user/login' })
+    if (response.error) {
+      setError(response.error)
       setValues(EMPTY_OBJECT)
       setLoading(false)
       return
     }
-    localStorage.setItem('authToken', token)
+    localStorage.setItem('authToken', response.token)
+    localStorage.setItem('user', JSON.stringify(response.user))
     setLoading(false)
     router.push('/home')
   }
@@ -88,6 +92,7 @@ const Home = () => {
           name="password"
           label="Password"
           variant="outlined"
+          className={classes.input}
           type="password"
           onChange={handleChange}
         />
