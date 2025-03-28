@@ -103,7 +103,13 @@ const Home = ({ posts, user, token }) => {
         open={openPost}
         onClose={() => setOpenPost(false)}
       >
-        <PostModal post={currentPost} user={user} token={token}/>
+        <PostModal 
+          post={currentPost} 
+          user={user} 
+          token={token}
+          onClose={() => setOpenPost(false)}
+
+        />
       </Modal>
     </Container>
   )

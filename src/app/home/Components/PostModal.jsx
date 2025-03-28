@@ -32,19 +32,21 @@ const Container = styled('div')({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
-  [`& .${classes.card}`]: {
-    padding: '0',
-    textTransform: 'none',
+  maxHeight: '90vh',
+  overflowY: 'auto', 
+  [`& .${classes.content}`]: {
+    maxHeight: '60vh',
+    overflowY: 'auto',
   },
   [`& .${classes.multiInput}`]: {
-    width: '100%',
+    width: '100%'
   },
   [`& .${classes.singleInput}`]: {
     width: '75%',
   }
 })
 
-const PostModal = ({ post, user, token }) => {
+const PostModal = ({ post, user, token, onClose }) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -96,39 +98,53 @@ const PostModal = ({ post, user, token }) => {
         <CustomAlert type='error' message={error} />
       </Stack>}
       {/* Title */}
-      <Stack
+      <Stack 
         direction='row'
+        justifyContent='space-between'
         alignItems='center'
-        padding='1ch'
+        gap='1rem'
       >
-        <ActiveWrapper value={!editingTitle}>
-          <T variant="h6">{post.title}</T>
-        </ActiveWrapper>
-        <ActiveWrapper value={editingTitle}>
-          <TextField
-            id="title"
-            name="title"
-            label="Title"
-            variant="standard"
-            className={classes.singleInput}
-            value={values.title}
-            onChange={handleChange}
+        <Stack
+          direction='row'
+          alignItems='center'
+        >
+          <ActiveWrapper value={!editingTitle}>
+            <T variant="h6">{post.title}</T>
+          </ActiveWrapper>
+          <ActiveWrapper value={editingTitle}>
+            <TextField
+              id="title"
+              name="title"
+              label="Title"
+              variant="standard"
+              className={classes.singleInput}
+              value={values.title}
+              onChange={handleChange}
+            />
+          </ActiveWrapper>
+          <ActiveWrapper value={user.isAdmin}>
+            <IconButton onClick={() => setEditingTitle(!editingTitle)}>
+              {editingTitle 
+                ? <CloseIcon fontSize='small'/> 
+                : <EditIcon fontSize='small'/>
+              }
+            </IconButton>
+          </ActiveWrapper>
+        </Stack>
+        <IconButton>
+          <CloseIcon 
+            fontSize='medium'
+            onClick={onClose}
           />
-        </ActiveWrapper>
-        <ActiveWrapper value={user.isAdmin}>
-          <IconButton onClick={() => setEditingTitle(!editingTitle)}>
-            {editingTitle 
-              ? <CloseIcon fontSize='small'/> 
-              : <EditIcon fontSize='small'/>
-            }
-          </IconButton>
-        </ActiveWrapper>
+        </IconButton>
       </Stack>
+      
       {/* Content */}
       <Stack
         direction='row'
         alignItems='center'
         padding='1ch'
+        className={classes.content}
       >
         <ActiveWrapper value={!editingContent}>
           <T variant="body1">{post.content}</T>
@@ -159,13 +175,13 @@ const PostModal = ({ post, user, token }) => {
         direction='row'
         alignItems='center'
         justifyContent='flex-end'
-        padding='1ch'
         gap='1rem'
       >
         <ActiveWrapper value={user.isAdmin}>
           <IconButton>
             <DeleteIcon 
               fontSize='medium'
+              color='error'
               onClick={() => setOpen(true)}
             />
           </IconButton>
@@ -203,9 +219,14 @@ const PostModal = ({ post, user, token }) => {
   )
 }
 
-const Wrapper = ({ post, user, token }) => {
+const Wrapper = ({ post, user, token, onClose }) => {
   return (
-    <PostModal post={post} user={user} token={token} />
+    <PostModal 
+      post={post} 
+      user={user} 
+      token={token} 
+      onClose={onClose}
+    />
   )
 }
 
