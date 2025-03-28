@@ -33,7 +33,7 @@ const Container = styled('div')({
   },
 })
 
-const PostModal = ({ id, token, onClose }) => {
+const DeleteModal = ({ id, token, onClose }) => {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -78,7 +78,7 @@ const PostModal = ({ id, token, onClose }) => {
 
 const Wrapper = ({ id, token, onClose }) => {
 
-  return <PostModal id={id} token={token} onClose={onClose} />
+  return <DeleteModal id={id} token={token} onClose={onClose} />
     
 }
 

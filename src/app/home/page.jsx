@@ -3,11 +3,14 @@ import { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles'
 import { grey, green } from '@mui/material/colors'
 import AuthWrapper from '~/app/Libs/SharedUI/AuthWrapper/AuthWrapper'
+import ActiveWrapper from '~/app/home/Components/ActiveWrapper'
 import apiFetch from '~/app/Libs/apiFetch'
 import getClassPrefixer from '~/app/Libs/getClassPrefixer'
-import { Button, Modal, Typography as T } from '@mui/material'
+import { Button, Modal, IconButton, Typography as T } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
 import Loading from '~/app/Libs/SharedUI/Loading/Loading'
 import PostModal from '~/app/home/Components/PostModal'
+import AddModal from '~/app/home/Components/AddModal'
 
 const displayName = 'Home'
 const classes = getClassPrefixer(displayName)
@@ -39,10 +42,22 @@ const Container = styled('div')({
     color: grey[50],
     textAlign: 'left',
   },
+  [`& .${classes.addContainer}`]: {
+    position: 'fixed',
+    bottom: '2rem',
+    right: '2rem',
+    backgroundColor: green[800],
+    zIndex: 1000,
+    border: `2px solid ${grey[300]}`,
+  },
+  [`& .${classes.addIcon}`]:{
+    color: grey[50],
+  }
 })
 
 const Home = ({ posts, user, token }) => {
-  const [open, setOpen] = useState(false)
+  const [openPost, setOpenPost] = useState(false)
+  const [openAdding, setOpenAdding] = useState(false)
   const [currentPost, setCurrentPost] = useState(null)
   return (
     <Container>
@@ -52,7 +67,7 @@ const Home = ({ posts, user, token }) => {
           className={classes.card}
           onClick={() => {
             setCurrentPost(post)
-            setOpen(true)
+            setOpenPost(true)
           }}
         >
           <div className={classes.content}>
@@ -65,9 +80,28 @@ const Home = ({ posts, user, token }) => {
           </div>
         </Button>
       ))} 
+      <ActiveWrapper value={user?.isAdmin}>
+        <IconButton className={classes.addContainer}>
+          <AddIcon 
+            className={classes.addIcon}
+            fontSize='large'
+            onClick={() => setOpenAdding(true)}
+          />
+        </IconButton>
+      </ActiveWrapper>
+
       <Modal
-        open={open}
-        onClose={() => setOpen(false)}
+        open={openAdding}
+        onClose={() => setOpenAdding(false)}
+      >
+        <AddModal 
+          token={token} 
+          onClose={() => setOpenAdding(false)}
+        />
+      </Modal>
+      <Modal
+        open={openPost}
+        onClose={() => setOpenPost(false)}
       >
         <PostModal post={currentPost} user={user} token={token}/>
       </Modal>
