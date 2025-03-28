@@ -16,10 +16,9 @@ const Container = styled('div')({
   backgroundColor: grey[50],
   width: '100vw',
   display: 'flex',
-  flexWrap: 'wrap',
-  flexDirection: 'row',
+  flexDirection: 'column',
   justifyContent: 'center',
-  alignItems: 'flex-start',
+  alignItems: 'center',
   padding: '1rem',
   gap: '1rem', 
   flex: 1,
@@ -42,7 +41,7 @@ const Container = styled('div')({
   },
 })
 
-const Home = ({ posts }) => {
+const Home = ({ posts, user, token }) => {
   const [open, setOpen] = useState(false)
   const [currentPost, setCurrentPost] = useState(null)
   return (
@@ -70,7 +69,7 @@ const Home = ({ posts }) => {
         open={open}
         onClose={() => setOpen(false)}
       >
-        <PostModal post={currentPost}/>
+        <PostModal post={currentPost} user={user} token={token}/>
       </Modal>
     </Container>
   )
@@ -79,16 +78,20 @@ const Home = ({ posts }) => {
 const Wrapper = () => {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState(false)
+  const [token, setToken] = useState('')
 
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true)
-      const token = localStorage.getItem('authToken')
-      const response = await apiFetch({ method: 'GET', url: '/api/post', token })
+      const storedToken = localStorage.getItem('authToken')
+      setToken(storedToken)
+      const response = await apiFetch({ method: 'GET', url: '/api/post', token: storedToken })
       if (response.error) {
         return
       }
       setPosts(response)
+      setUser(JSON.parse(localStorage.getItem('user'))) 
       setLoading(false)
     }
     fetchPosts()
@@ -98,7 +101,7 @@ const Wrapper = () => {
 
   return (
     <AuthWrapper hasToBeLogged={true}>
-      <Home posts={posts} />
+      <Home posts={posts} user={user} token={token}/>
     </AuthWrapper>
   )
 }

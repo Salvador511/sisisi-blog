@@ -52,7 +52,7 @@ export const PUT = async (request, { params }) => {
 
 export const PATCH = async (request, { params }) => {
   try {
-    const { id } = params
+    const { id } = await params
     const hasPermission = authenticateToken({ headers: request.headers, neededAdmind: true })
     if (!hasPermission) return ERROR.FORBIDDEN()
     const data = await request.json()
@@ -79,11 +79,8 @@ export const DELETE = async (request, { params }) => {
     if (!hasPermission) return ERROR.FORBIDDEN()
     const payload = await queryDB({
       entity: 'post',
-      queryType: 'update',
+      queryType: 'delete',
       filter: { id: Number(id) },
-      data: {
-        active: false
-      }
     })
     if (payload) {
       const response = cleanerData({ payload })
