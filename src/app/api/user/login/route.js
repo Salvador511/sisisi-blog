@@ -29,7 +29,6 @@ export const POST = async request => {
     return NextResponse.json({ token, user }, { status: 200 })
  
   } catch (error) {
-    console.error('Error on login', error)
     return NextResponse.json({ error: error.message }, { status: error.status || 500 })
   }
 }

@@ -38,6 +38,9 @@ const Container = styled('div')({
   },
   [`& .${classes.multiInput}`]: {
     width: '100%',
+  },
+  [`& .${classes.singleInput}`]: {
+    width: '75%',
   }
 })
 
@@ -107,6 +110,7 @@ const PostModal = ({ post, user, token }) => {
             name="title"
             label="Title"
             variant="standard"
+            className={classes.singleInput}
             value={values.title}
             onChange={handleChange}
           />
