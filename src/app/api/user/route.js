@@ -1,18 +1,17 @@
 // src/app/api/user/register/route.ts
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
 import ERROR from '~/Libs/error'
 import queryDB from '~/app/api/Libs/queryDB'
 import validatorFields from '~/app/api/Libs/validatorFields'
 import { User } from '~/app/api/entities'
 
-export const POST = async (request) => {
+export const POST = async request => {
   try {
     const data = await request.json()
 
     const isValid = validatorFields({ data, shape: User.shape })
-    if (!isValid) return ERROR.INVALID_FIELDS()
+    if (!isValid) return ERROR.USER_ALREADY_EXIST()
 
     const existingUser = await queryDB({
       entity: 'user',
@@ -20,13 +19,7 @@ export const POST = async (request) => {
       filter: { username: data.username }
     })
 
-    if (existingUser) {
-      return NextResponse.json(
-        { error: 'Username already exists' },
-        { status: 400 }
-      )
-    }
-
+    if (existingUser) return ERROR.INVALID_FIELDS('User Already Exists')
     const hashedPassword = await bcrypt.hash(data.password, 10)
 
     const newUser = await queryDB({
@@ -40,17 +33,8 @@ export const POST = async (request) => {
       }
     })
 
-    const token = jwt.sign(
-      {
-        userId: newUser.id,
-        isAdmin: newUser.isAdmin
-      },
-      process.env.JWT_SECRET
-    )
-
     return NextResponse.json(
       {
-        token,
         user: {
           id: newUser.id,
           username: newUser.username,
@@ -63,10 +47,6 @@ export const POST = async (request) => {
     )
 
   } catch (error) {
-    console.error('Error on register', error)
-    return NextResponse.json(
-      { error: error.message },
-      { status: error.status || 500 }
-    )
+    return NextResponse.json({ error: error.message }, { status: error.status || 500 })
   }
 }
