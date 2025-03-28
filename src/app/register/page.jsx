@@ -59,7 +59,13 @@ const Home = () => {
   const handleSubmit = async e => {
     e.preventDefault()
     setLoading(true)
-    const response = await apiFetch({ payload: values, method: 'POST', url: '/api/user' })
+
+    const payload = {
+      ...values,
+      isAdmin: false,
+    }
+
+    const response = await apiFetch({ payload, method: 'POST', url: '/api/user' })
     if (response.error) {
       setLoading(false)
       setError(response.error)
@@ -67,14 +73,9 @@ const Home = () => {
     }
 
     setLoading(false)
-    if (response.error) {
-      setError(response.error)
-      return
-    }
+    alert('User registered successfully!')
+    router.push('/login')
 
-    localStorage.setItem('authToken', response.token)
-    localStorage.setItem('user', JSON.stringify(response.user))
-    router.push('/home')
   }
 
   const isDisabled = !values.username || !values.password || !values.name || !values.lastName
